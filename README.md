@@ -24,7 +24,7 @@ Run commands in batch mode by separating them by spaces, such as;
 ### Include arguments
 
 When ever you want commands to include arguments, the command and arguments should be wrapped in quotes, such as;  
-``$ sbt "do-something arg1 arg2" where do-something is the command, and arg1/arg2 are the arguments
+``$ sbt "do-something arg1 arg2"`` where do-something is the command, and arg1/arg2 are the arguments
 
 ### Continuous build and test
 To speed up your edit-compile-test cycle, you can ask sbt to automatically recompile or run tests whenever you save a source file.
