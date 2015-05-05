@@ -22,7 +22,22 @@ object VicroadsImporter {
                 sql"INSERT INTO site_alarms (site_id, timestamp, event, start) VALUES (${siteAlarm.site_id}, ${siteAlarm.timestamp}, ${siteAlarm.event}, ${siteAlarm.start});".update.apply()
             }
         }
-    } 
+    }
+
+    def createSiteAlarmsTable() {
+        DB localTx { implicit session => SQL(
+            s"""
+                CREATE TABLE IF NOT EXISTS site_alarms (
+                    id BIGSERIAL PRIMARY KEY,
+                    site_id BIGSERIAL REFERENCES sites (id) ON DELETE CASCADE,
+                    timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
+                    event VARCHAR(10) NOT NULL,
+                    start BOOLEAN NOT NULL,
+                    CONSTRAINT site_alarms_constraint1 UNIQUE (site_id, timestamp, event, start)
+                )
+            """).execute.apply()
+        }
+    }
 
     case class SiteAlarmRecord (
         site_id     : Int,
@@ -46,6 +61,8 @@ object VicroadsImporter {
             "jdbc:postgresql://localhost:5432/vicroads_ahi",
             "postgres", "postgres"
         )
+
+        createSiteAlarmsTable()
 
         // Query the database for scats in the sites table
         val scatsSites = fetchSitesIds()
