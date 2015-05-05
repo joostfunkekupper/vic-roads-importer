@@ -34,7 +34,7 @@ object VicroadsImporter {
     def main(args: Array[String]) {
 
         if (args.length == 0) {
-            println("Please include the CSV file PATH as an argument")
+            println("\n--- Please include the CSV file PATH as an argument ---\n")
             return
         }
 
@@ -55,6 +55,11 @@ object VicroadsImporter {
         val csvFile = sc.textFile(args(0))
 
         val header = csvFile.map(line => line.split(",").map(_.trim)).first
+
+        if (header.length < 8 || header(2) != "Date" || header(3) != "Time" || header(5) != "Site" || header(6) != "+/-" || header(7) != "Event") {
+            println("\n--- Invalid CSV file. Please ensure you are importing the correct file ---\n")
+            return
+        }
 
         val data = csvFile.map(line => line.split(",")
                           .map(_.trim))
