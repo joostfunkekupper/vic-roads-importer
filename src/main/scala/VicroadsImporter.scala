@@ -33,6 +33,11 @@ object VicroadsImporter {
 
     def main(args: Array[String]) {
 
+        if (args.length == 0) {
+            println("Please include the CSV file PATH as an argument")
+            return
+        }
+
         val conf = new SparkConf().setMaster("local").setAppName("VicroadsImporter") 
         val sc = new SparkContext(conf)
 
@@ -47,7 +52,7 @@ object VicroadsImporter {
         val (scat_ids, scat_numbers) = scatsSites.unzip
 
         // TODO: Convert to use arguments
-        val csvFile = sc.textFile("alarms.csv")
+        val csvFile = sc.textFile(args(0))
 
         val header = csvFile.map(line => line.split(",").map(_.trim)).first
 
